@@ -1,0 +1,63 @@
+{
+    "pipeline": {
+      "name": "MyPipeline",
+      "roleArn": "arn:aws:iam::918747151581:role/CodePipelineServiceRole",
+      "artifactStore": {
+        "type": "S3",
+        "location": "ha14.02.levent.o"
+      },
+      "stages": [
+        {
+          "name": "Source",
+          "actions": [
+            {
+              "name": "SourceAction",
+              "actionTypeId": {
+                "category": "Source",
+                "owner": "ThirdParty",
+                "version": "1",
+                "provider": "GitHub"
+              },
+              "configuration": {
+                "Owner": "Lev2607",
+                "Repo": "ha14.02.",
+                "Branch": "main",
+                "OAuthToken": "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"
+              },
+              "outputArtifacts": [
+                {
+                  "name": "BuildArtifact"
+                }
+              ],
+              "runOrder": 1
+            }
+          ]
+        },
+        {
+          "name": "Deploy",
+          "actions": [
+            {
+              "name": "DeployAction",
+              "actionTypeId": {
+                "category": "Deploy",
+                "owner": "AWS",
+                "version": "1",
+                "provider": "CodeDeploy"
+              },
+              "configuration": {
+                "ApplicationName": "HelloWorldApp",
+                "DeploymentGroupName": "HelloWorldAppGroup"
+              },
+              "outputArtifacts": [],
+              "inputArtifacts": [
+                {
+                  "name": "BuildArtifact"
+                }
+              ],
+              "runOrder": 1
+            }
+          ]
+        }
+      ]
+    }
+  }
